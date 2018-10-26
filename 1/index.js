@@ -6,7 +6,7 @@ let activeLines = true;
 let color = { r: 255, g: 255, b: 255 };
 
 function preload() {
-    song = loadSound('sweetly.mp3', () =>
+    song = loadSound('../assets/sweetly.mp3', () =>
         song.processPeaks((result) => peaks = result));
 }
 
