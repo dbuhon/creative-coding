@@ -2,7 +2,7 @@ let yoff = 0.0;
 let song;
 let peaks = [];
 let dark = true;
-let fast = true;
+let fast = false;
 
 function preload() {
     song = loadSound('../assets/song.mp3', () => song.processPeaks((result) => peaks = result));

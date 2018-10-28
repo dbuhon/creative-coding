@@ -1,6 +1,6 @@
 let song;
 let xoff = .1;
-let forward = true;
+let forward = false;
 let beatDebounce = 0;
 let color = { r: 255, g: 255, b: 255 };
 
@@ -22,8 +22,8 @@ function setup() {
 }
 
 function draw() {
-    beatDebounce++;
     background(25);
+    beatDebounce++;
     translate(width / 2, height / 2);
 
     const level = amplitude.getLevel();
@@ -33,7 +33,7 @@ function draw() {
             randomizeColor();
             xoff += xoff <= .1 || Math.random() >= .33 ? .015 : -0.015;
         }
-        level >= .1 && (forward = !forward);
+        level >= .6 && (forward = !forward);
     }
 
     for (let i = 0; i <= width; i += 2) {
