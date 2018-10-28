@@ -1,11 +1,13 @@
 let song;
 let xoff = .1;
-let forward = true;
-let beatDebounce = 0;
+let fast = true;
+let canSwitchSpeed = false;
 let color = { r: 255, g: 255, b: 255 };
+let beatDebounce = .1;
+let beatCount = 0;
 
 function preload() {
-    song = loadSound('../assets/missed-calls.mp3');
+    song = loadSound('../assets/past.mp3');
 }
 
 function setup() {
@@ -19,29 +21,34 @@ function setup() {
 
     amplitude = new p5.Amplitude();
     amplitude.setInput(song);
+    
+    setInterval(() => canSwitchSpeed = true, 5000);
 }
 
 function draw() {
-    beatDebounce++;
     background(25);
+    beatDebounce++;
     translate(width / 2, height / 2);
 
     const level = amplitude.getLevel();
-    if (beatDebounce > 15) {
-        if (level > .4) {
-            beatDebounce = 0;
-            randomizeColor();
-            xoff += xoff <= .1 || Math.random() >= .33 ? .015 : -0.015;
+    if (beatDebounce > 10 && level >= .1) {
+        beatDebounce = 0;
+        xoff += (xoff <= .1 || Math.random() >= .5) ? .0005 : -0.0005
+
+        if (canSwitchSpeed) {
+            canSwitchSpeed = false;
+            xoff += (xoff <= .1 || Math.random() >= .5) ? .005 : -0.05
+            fast = !fast;
         }
-        level >= .1 && (forward = !forward);
     }
 
-    for (let i = 0; i <= width; i += 2) {
-        ((i > width * level) && (forward || i > width / 2)) ? stroke(0) : setCurrentColor();
+    for (let i = 0; i <= 2550; i++) {
+        setCurrentColor({ r: i / 10, g: i / 10, b: i / 10 });
         line(x(i), y(i), x(i + i * xoff), y(i + i * xoff));
     }
 
-    xoff += forward ? 0.000005 : -0.00000075;
+
+    xoff += fast ? 0.000005 : 0.0000005;
 }
 
 x = (value) => Math.sin(value) * xoff * value;
@@ -52,7 +59,3 @@ function setCurrentColor(otherColor) {
     stroke(color.r, color.g, color.b);
 }
 
-function randomizeColor() {
-    color = { r: random(0, 255), g: random(0, 255), b: random(0, 255) };
-    stroke(color.r, color.g, color.b);
-}
