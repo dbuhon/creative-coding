@@ -61,6 +61,7 @@ function draw() {
     }
 
     xoff += fast ? 0.000005 : 0.000001;
+
 }
 
 function x(value) {

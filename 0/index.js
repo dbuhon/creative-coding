@@ -1,11 +1,10 @@
 let yoff = 0.0;
 let song;
-let peaks = [];
 let dark = true;
 let fast = false;
 
 function preload() {
-    song = loadSound('../assets/song.mp3', () => song.processPeaks((result) => peaks = result));
+    song = loadSound('../assets/song.mp3');
 }
 
 function setup() {
@@ -13,10 +12,14 @@ function setup() {
     fill(25);
     song.loop();
     song.play();
+
+    amplitude = new p5.Amplitude();
+    amplitude.setInput(song);
 }
 
 function draw() {
-    if (peaks.find(p => p.toFixed(1) === song.currentTime().toFixed(1))) {
+    const level = amplitude.getLevel();
+    if (level >= .3) {
         color = randomizeColor(color);
         fill(color.r, color.g, color.b);
         fast = !fast;
@@ -31,7 +34,7 @@ function draw() {
         xoff += 0.01;
     }
 
-    yoff += fast ? 0.005 : 0.0005;
+    yoff += fast ? 0.0025 : 0.0005;
     vertex(width, height);
     vertex(0, height);
     endShape();
